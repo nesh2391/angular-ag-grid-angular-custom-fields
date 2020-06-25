@@ -10,5 +10,6 @@ export class RedComponentComponent {
 
     agInit(params: any): void {
         this.params = params;
+        //console.log(this.params);
     }
 }
