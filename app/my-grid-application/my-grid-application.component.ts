@@ -6,7 +6,8 @@ import {RedComponentComponent} from "../red-component/red-component.component";
 
 @Component({
     selector: 'app-my-grid-application',
-    templateUrl: './my-grid-application.component.html'
+    templateUrl: './my-grid-application.component.html',
+    styleUrls: ['./my-grid-application.component.css']
 })
 export class MyGridApplicationComponent {
     private gridOptions: GridOptions;
@@ -19,8 +20,22 @@ export class MyGridApplicationComponent {
     constructor() {
         this.gridOptions = <GridOptions>{
           enableSorting: true,
-          // enable filtering 
-          enableFilter: true
+          enableFilter: true,
+         
+          getRowStyle(params) {
+            if (params.data.thisEdited) {
+                return {'color': 'orange'}
+            }
+            return null;
+          },
+          onCellValueChanged: function(event) {
+            event.data.thisEdited=true;
+            console.log(event);
+            console.log(event.rowIndex);
+
+            let row = event.api.getDisplayedRowAtIndex(event.rowIndex);
+            event.api.redrawRows({ rowNodes: [row] });
+          }
         };
         
         this.columnDefs = [
@@ -35,15 +50,6 @@ export class MyGridApplicationComponent {
                 cellRendererFramework: RedComponentComponent,
                 width: 100
             },
-            //   {
-            //     headerName: "Date",
-            //     field: "Date",
-            //     cellRenderer:function(params) {
-            //         return '<input type="date"  >';
-            //     },
-            //     width: 160,
-            //     editable: true
-            // }
             {
                 headerName: "Date",
                 field: 'date',
@@ -65,17 +71,16 @@ export class MyGridApplicationComponent {
             {id: 5, value: 10},
             {id: 10, value: 15},
             {id: 15, value: 20}
-        ]
-    }
+        ];
 
-  // callbackCheck(){
-  //     var cellDefs = this.gridOptions.api.getEditingCells();
-  //     cellDefs.forEach(function(cellDef) {
-  //         console.log(cellDef.rowIndex);
-  //         console.log(cellDef.column.getId());
-  //         console.log(cellDef.floating);
-  //     });
-  //   }    
+    }   
+
+
+    private isEditedRow() {
+      return (params) => {
+          return params.data.thisEdited;
+      }
+    }
 
 
   getDatePicker() {
@@ -99,6 +104,7 @@ export class MyGridApplicationComponent {
       this.eInput.select();
     };
     Datepicker.prototype.getValue = function (params) {
+      //params.data.thisEdited=true;
       return this.eInput.value;
     };
     Datepicker.prototype.destroy = function () { };

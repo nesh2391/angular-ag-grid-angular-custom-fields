@@ -2,7 +2,7 @@
 <div style="width: 200px;">
     <ag-grid-angular 
     #agGrid 
-    id="myGrid"
+    id="myGrid2"
     style="width: 200%; height: 200px;" 
     class="ag-theme-fresh" 
     [gridOptions]="gridOptions"  
@@ -15,7 +15,7 @@
 <button (click)="callbackCheck()">Brilliant</button>
 <ag-grid-angular
       #agGrid
-      style="width: 100%; height: 100%;"
+      style="width: 100%; height: 40%;"
       id="myGrid"
       class="ag-theme-fresh" 
       [columnDefs]="columnDefs"
@@ -24,6 +24,8 @@
       [rowData]="rowData"
       (gridReady)="onGridReady($event)"
     ></ag-grid-angular>
+
+    <div class="modified">Hello </div>
 
     <!-- 
        <ag-grid-angular
